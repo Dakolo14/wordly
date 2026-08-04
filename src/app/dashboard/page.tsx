@@ -46,6 +46,16 @@ export default function Dashboard() {
     }
   };
 
+  const handleSpeak = (text: string) => {
+    if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+      // Cancel any ongoing speech
+      window.speechSynthesis.cancel();
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.rate = 0.9;
+      window.speechSynthesis.speak(utterance);
+    }
+  };
+
   useEffect(() => {
     async function fetchData() {
       if (!user) return;
@@ -128,7 +138,18 @@ export default function Dashboard() {
           {todayWord && todayWord.word ? (
             <div className="flex flex-col items-center text-center">
               <span className="text-sm font-medium text-[var(--color-accent)] mb-2 uppercase tracking-widest">Today's Word</span>
-              <h2 className="text-5xl sm:text-7xl font-medium mb-4 tracking-tight capitalize">{todayWord.word.word}</h2>
+              <div className="flex items-center justify-center gap-4 mb-4">
+                <h2 className="text-5xl sm:text-7xl font-medium tracking-tight capitalize">{todayWord.word.word}</h2>
+                <button 
+                  onClick={() => handleSpeak(todayWord.word?.word || '')}
+                  className="p-3 rounded-full bg-[var(--background)] border border-[var(--color-surface-border)] hover:bg-[var(--color-surface-border)] transition-colors opacity-70 hover:opacity-100"
+                  aria-label="Listen to pronunciation"
+                >
+                  <svg className="w-6 h-6 sm:w-8 sm:h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
+                  </svg>
+                </button>
+              </div>
               <span className="px-3 py-1 rounded-full bg-[var(--background)] border border-[var(--color-surface-border)] text-sm italic mb-6">
                 {todayWord.word.partOfSpeech}
               </span>
@@ -166,7 +187,18 @@ export default function Dashboard() {
               {history.map((item) => item.word && (
                 <div key={item.date} className="bg-[var(--color-surface)] p-6 rounded-2xl border border-[var(--color-surface-border)]">
                   <div className="text-xs opacity-60 mb-2">{new Date(item.date).toLocaleDateString(undefined, { weekday: 'long', month: 'short', day: 'numeric' })}</div>
-                  <h4 className="text-xl sm:text-2xl font-medium capitalize mb-1">{item.word.word}</h4>
+                  <div className="flex items-center justify-between mb-1">
+                    <h4 className="text-xl sm:text-2xl font-medium capitalize">{item.word.word}</h4>
+                    <button 
+                      onClick={() => handleSpeak(item.word?.word || '')}
+                      className="p-2 rounded-full hover:bg-[var(--background)] transition-colors opacity-60 hover:opacity-100"
+                      aria-label="Listen to pronunciation"
+                    >
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
+                      </svg>
+                    </button>
+                  </div>
                   <div className="text-sm italic opacity-70 mb-3">{item.word.partOfSpeech}</div>
                   <p className="text-sm line-clamp-2 opacity-90">{item.word.meaning}</p>
                 </div>
