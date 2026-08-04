@@ -109,9 +109,9 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col max-w-4xl mx-auto p-6">
+    <div className="min-h-screen flex flex-col w-full px-6 sm:px-12 md:px-24 mx-auto">
       <header className="flex justify-between items-center py-6 mb-8 border-b border-[var(--color-surface-border)]">
-        <h1 className="text-2xl font-bold tracking-tight">Word of the Day</h1>
+        <h1 className="text-xl sm:text-2xl font-medium tracking-tight">Word of the Day</h1>
         <nav className="flex gap-4 items-center">
           <button 
             onClick={handleLogout}
@@ -128,14 +128,14 @@ export default function Dashboard() {
           {todayWord && todayWord.word ? (
             <div className="flex flex-col items-center text-center">
               <span className="text-sm font-medium text-[var(--color-accent)] mb-2 uppercase tracking-widest">Today's Word</span>
-              <h2 className="text-5xl sm:text-6xl font-black mb-4 tracking-tight capitalize">{todayWord.word.word}</h2>
+              <h2 className="text-5xl sm:text-7xl font-medium mb-4 tracking-tight capitalize">{todayWord.word.word}</h2>
               <span className="px-3 py-1 rounded-full bg-[var(--background)] border border-[var(--color-surface-border)] text-sm italic mb-6">
                 {todayWord.word.partOfSpeech}
               </span>
               <p className="text-xl sm:text-2xl mb-8 max-w-2xl">{todayWord.word.meaning}</p>
               
-              <div className="bg-[var(--background)] w-full max-w-2xl p-6 rounded-2xl border border-[var(--color-surface-border)] text-left">
-                <h3 className="text-sm font-bold uppercase tracking-wider mb-2 opacity-60">Example</h3>
+              <div className="bg-[var(--background)] w-full max-w-2xl p-6 rounded-2xl border border-[var(--color-surface-border)] text-left mx-auto">
+                <h3 className="text-sm font-medium uppercase tracking-wider mb-2 opacity-60">Example</h3>
                 <p className="text-lg italic">&ldquo;{todayWord.word.exampleSentence}&rdquo;</p>
               </div>
               
@@ -152,7 +152,7 @@ export default function Dashboard() {
             </div>
           ) : (
             <div className="text-center py-12">
-              <h2 className="text-2xl font-bold mb-2">No word for today yet!</h2>
+              <h2 className="text-2xl font-medium mb-2">No word for today yet!</h2>
               <p className="opacity-70">Check back later once the daily word is generated.</p>
             </div>
           )}
@@ -161,12 +161,12 @@ export default function Dashboard() {
         {/* History Section */}
         {history.length > 0 && (
           <section>
-            <h3 className="text-xl font-bold mb-6">Previous Words</h3>
+            <h3 className="text-xl font-medium mb-6">Previous Words</h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
               {history.map((item) => item.word && (
                 <div key={item.date} className="bg-[var(--color-surface)] p-6 rounded-2xl border border-[var(--color-surface-border)]">
                   <div className="text-xs opacity-60 mb-2">{new Date(item.date).toLocaleDateString(undefined, { weekday: 'long', month: 'short', day: 'numeric' })}</div>
-                  <h4 className="text-2xl font-bold capitalize mb-1">{item.word.word}</h4>
+                  <h4 className="text-xl sm:text-2xl font-medium capitalize mb-1">{item.word.word}</h4>
                   <div className="text-sm italic opacity-70 mb-3">{item.word.partOfSpeech}</div>
                   <p className="text-sm line-clamp-2 opacity-90">{item.word.meaning}</p>
                 </div>

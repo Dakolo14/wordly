@@ -34,7 +34,7 @@ export default function ForgotPassword() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-center p-6">
       <div className="w-full max-w-md bg-[var(--color-surface)] p-8 rounded-2xl shadow-sm border border-[var(--color-surface-border)]">
-        <h2 className="text-3xl font-bold mb-2 text-center">Reset Password</h2>
+        <h2 className="text-3xl font-medium mb-2 text-center">Reset Password</h2>
         <p className="text-center opacity-70 mb-6 text-sm">
           Enter your email address and we'll send you a link to reset your password.
         </p>

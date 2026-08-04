@@ -51,7 +51,7 @@ export default function Login() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-center p-6">
       <div className="w-full max-w-md bg-[var(--color-surface)] p-8 rounded-2xl shadow-sm border border-[var(--color-surface-border)]">
-        <h2 className="text-3xl font-bold mb-6 text-center">Welcome Back</h2>
+        <h2 className="text-3xl font-medium mb-6 text-center">Welcome Back</h2>
         
         {error && (
           <div className="bg-red-50 text-red-500 p-3 rounded-lg mb-6 text-sm border border-red-100">
