@@ -1,9 +1,9 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { signInWithEmailAndPassword, signInWithRedirect, getRedirectResult } from 'firebase/auth';
-import { doc, getDoc, setDoc, serverTimestamp } from 'firebase/firestore';
-import { auth, db, googleProvider } from '@/lib/firebase/firebase';
+import { signInWithEmailAndPassword, signInWithRedirect } from 'firebase/auth';
+import { auth, googleProvider } from '@/lib/firebase/firebase';
+import { useAuth } from '@/context/AuthContext';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
@@ -13,31 +13,14 @@ export default function Login() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const { user, loading: authLoading } = useAuth();
 
-  // Handle Google redirect result when user comes back
+  // If user is already logged in (e.g. after Google redirect), go to dashboard
   useEffect(() => {
-    getRedirectResult(auth).then(async (result) => {
-      if (result) {
-        const user = result.user;
-        const docRef = doc(db, 'profiles', user.uid);
-        const docSnap = await getDoc(docRef);
-        if (!docSnap.exists()) {
-          await setDoc(docRef, {
-            displayName: user.displayName || user.email?.split('@')[0] || 'User',
-            email: user.email,
-            emailNotifications: true,
-            createdAt: serverTimestamp(),
-          });
-        }
-        router.push('/dashboard');
-      }
-    }).catch((err) => {
-      console.error('Google redirect error:', err);
-      if (err.code !== 'auth/popup-closed-by-user') {
-        setError('Failed to sign in with Google. Please try again.');
-      }
-    });
-  }, [router]);
+    if (!authLoading && user) {
+      router.push('/dashboard');
+    }
+  }, [user, authLoading, router]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -60,9 +43,17 @@ export default function Login() {
 
   const handleGoogleLogin = () => {
     setError('');
-    setLoading(true);
     signInWithRedirect(auth, googleProvider);
   };
+
+  // Show nothing while checking auth state
+  if (authLoading) {
+    return (
+      <main className="flex min-h-screen flex-col items-center justify-center p-6">
+        <div className="text-lg opacity-60">Loading...</div>
+      </main>
+    );
+  }
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-center p-6">

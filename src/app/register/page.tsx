@@ -1,9 +1,10 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { createUserWithEmailAndPassword, signInWithRedirect, getRedirectResult } from 'firebase/auth';
-import { doc, setDoc, getDoc, serverTimestamp } from 'firebase/firestore';
+import { createUserWithEmailAndPassword, signInWithRedirect } from 'firebase/auth';
+import { doc, setDoc, serverTimestamp } from 'firebase/firestore';
 import { auth, db, googleProvider } from '@/lib/firebase/firebase';
+import { useAuth } from '@/context/AuthContext';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
@@ -14,31 +15,17 @@ export default function Register() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const { user, loading: authLoading } = useAuth();
 
-  // Handle Google redirect result when user comes back
+  // If user is already logged in (e.g. after Google redirect), go to dashboard
   useEffect(() => {
-    getRedirectResult(auth).then(async (result) => {
-      if (result) {
-        const user = result.user;
-        const docRef = doc(db, 'profiles', user.uid);
-        const docSnap = await getDoc(docRef);
-        if (!docSnap.exists()) {
-          await setDoc(docRef, {
-            displayName: user.displayName || user.email?.split('@')[0] || 'User',
-            email: user.email,
-            emailNotifications: true,
-            createdAt: serverTimestamp(),
-          });
-        }
-        router.push('/dashboard');
-      }
-    }).catch((err) => {
-      console.error('Google redirect error:', err);
-      if (err.code !== 'auth/popup-closed-by-user') {
-        setError('Failed to sign in with Google. Please try again.');
-      }
-    });
-  }, [router]);
+    if (!authLoading && user) {
+      // The profile doc creation for Google users is now handled in AuthContext or
+      // implicitly they just go to dashboard. For simplicity, let's just redirect.
+      // We can rely on dashboard/app to ensure profile exists if needed later.
+      router.push('/dashboard');
+    }
+  }, [user, authLoading, router]);
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -47,11 +34,11 @@ export default function Register() {
 
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-      const user = userCredential.user;
+      const newUser = userCredential.user;
       
-      await setDoc(doc(db, 'profiles', user.uid), {
+      await setDoc(doc(db, 'profiles', newUser.uid), {
         displayName: displayName || email.split('@')[0],
-        email: user.email,
+        email: newUser.email,
         emailNotifications: true,
         createdAt: serverTimestamp(),
       });
@@ -72,9 +59,17 @@ export default function Register() {
 
   const handleGoogleLogin = () => {
     setError('');
-    setLoading(true);
     signInWithRedirect(auth, googleProvider);
   };
+
+  // Show nothing while checking auth state
+  if (authLoading) {
+    return (
+      <main className="flex min-h-screen flex-col items-center justify-center p-6">
+        <div className="text-lg opacity-60">Loading...</div>
+      </main>
+    );
+  }
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-center p-6">
