@@ -1,7 +1,7 @@
 'use client';
 
-import { useState } from 'react';
-import { signInWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
+import { useState, useEffect } from 'react';
+import { signInWithEmailAndPassword, signInWithRedirect, getRedirectResult } from 'firebase/auth';
 import { doc, getDoc, setDoc, serverTimestamp } from 'firebase/firestore';
 import { auth, db, googleProvider } from '@/lib/firebase/firebase';
 import { useRouter } from 'next/navigation';
@@ -13,6 +13,31 @@ export default function Login() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+
+  // Handle Google redirect result when user comes back
+  useEffect(() => {
+    getRedirectResult(auth).then(async (result) => {
+      if (result) {
+        const user = result.user;
+        const docRef = doc(db, 'profiles', user.uid);
+        const docSnap = await getDoc(docRef);
+        if (!docSnap.exists()) {
+          await setDoc(docRef, {
+            displayName: user.displayName || user.email?.split('@')[0] || 'User',
+            email: user.email,
+            emailNotifications: true,
+            createdAt: serverTimestamp(),
+          });
+        }
+        router.push('/dashboard');
+      }
+    }).catch((err) => {
+      console.error('Google redirect error:', err);
+      if (err.code !== 'auth/popup-closed-by-user') {
+        setError('Failed to sign in with Google. Please try again.');
+      }
+    });
+  }, [router]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -33,30 +58,10 @@ export default function Login() {
     }
   };
 
-  const handleGoogleLogin = async () => {
+  const handleGoogleLogin = () => {
     setError('');
     setLoading(true);
-    try {
-      const result = await signInWithPopup(auth, googleProvider);
-      const user = result.user;
-      
-      const docRef = doc(db, 'profiles', user.uid);
-      const docSnap = await getDoc(docRef);
-      if (!docSnap.exists()) {
-        await setDoc(docRef, {
-          displayName: user.displayName || user.email?.split('@')[0] || 'User',
-          email: user.email,
-          emailNotifications: true,
-          createdAt: serverTimestamp(),
-        });
-      }
-      
-      router.push('/dashboard');
-    } catch (err: any) {
-      setError('Failed to sign in with Google. Please try again.');
-    } finally {
-      setLoading(false);
-    }
+    signInWithRedirect(auth, googleProvider);
   };
 
   return (
