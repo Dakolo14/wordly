@@ -3,8 +3,8 @@ import { adminDb } from '@/lib/firebase/firebase-admin';
 import { Resend } from 'resend';
 import { GoogleGenAI } from '@google/genai';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
-const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+// Prevent Next.js from trying to pre-render this route at build time
+export const dynamic = 'force-dynamic';
 
 const PROMPT = `
 Generate a single unique, interesting English word suitable for a "Word of the Day" vocabulary-building app.
@@ -30,6 +30,10 @@ export async function GET(request: Request) {
     return new Response('Unauthorized', { status: 401 });
   }
 
+  // Initialize services inside the handler so they don't crash at build time
+  const resend = new Resend(process.env.RESEND_API_KEY);
+  const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+
   try {
     const today = new Date().toISOString().split('T')[0];
     
@@ -52,7 +56,7 @@ export async function GET(request: Request) {
     
     const wordData = JSON.parse(text.trim());
     
-    const wordId = wordData.word.toLowerCase().replace(/\\s+/g, '-');
+    const wordId = wordData.word.toLowerCase().replace(/\s+/g, '-');
 
     // 3. Save the generated word and create dailyWord
     const batch = adminDb.batch();
@@ -100,7 +104,7 @@ export async function GET(request: Request) {
 
       await resend.emails.send({
         from: 'Word of the Day <onboarding@resend.dev>',
-        to: emails, // Use the actual emails here, but remember Resend free tier without verified domain only sends to the owner's email
+        to: emails,
         subject: `Word of the Day: ${wordData.word}`,
         html: htmlContent,
       });
