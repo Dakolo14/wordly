@@ -1,8 +1,9 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { signInWithEmailAndPassword, signInWithRedirect } from 'firebase/auth';
-import { auth, googleProvider } from '@/lib/firebase/firebase';
+import { signInWithEmailAndPassword, signInWithRedirect, getRedirectResult } from 'firebase/auth';
+import { doc, getDoc, setDoc, serverTimestamp } from 'firebase/firestore';
+import { auth, db, googleProvider } from '@/lib/firebase/firebase';
 import { useAuth } from '@/context/AuthContext';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
@@ -21,6 +22,32 @@ export default function Login() {
       router.push('/dashboard');
     }
   }, [user, authLoading, router]);
+
+  // Handle Google redirect result
+  useEffect(() => {
+    getRedirectResult(auth).then(async (result) => {
+      if (result) {
+        const user = result.user;
+        const docRef = doc(db, 'profiles', user.uid);
+        const docSnap = await getDoc(docRef);
+        if (!docSnap.exists()) {
+          await setDoc(docRef, {
+            displayName: user.displayName || user.email?.split('@')[0] || 'User',
+            email: user.email,
+            emailNotifications: true,
+            createdAt: serverTimestamp(),
+          });
+        }
+        // Do NOT router.push('/dashboard') here. Let the above useEffect handle it 
+        // to avoid race conditions with AuthContext.
+      }
+    }).catch((err) => {
+      console.error('Google redirect error:', err);
+      if (err.code !== 'auth/popup-closed-by-user') {
+        setError('Failed to sign in with Google. Please try again.');
+      }
+    });
+  }, []);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -108,7 +135,7 @@ export default function Login() {
         <button 
           onClick={handleGoogleLogin}
           disabled={loading}
-          className="w-full py-3 bg-white text-gray-700 border border-gray-300 rounded-lg font-medium hover:bg-gray-50 transition-colors disabled:opacity-70 flex items-center justify-center gap-2"
+          className="w-full py-3 bg-white text-gray-700 border border-gray-300 rounded-lg font-medium hover:bg-gray-50 transition-colors disabled:opacity-70 disabled:cursor-not-allowed cursor-pointer flex items-center justify-center gap-2"
         >
           <svg className="w-5 h-5" viewBox="0 0 24 24">
             <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
