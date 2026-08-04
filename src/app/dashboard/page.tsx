@@ -4,7 +4,8 @@ import { useEffect, useState } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { useRouter } from 'next/navigation';
 import { doc, getDoc, collection, query, orderBy, limit, getDocs } from 'firebase/firestore';
-import { db } from '@/lib/firebase/firebase';
+import { auth, db } from '@/lib/firebase/firebase';
+import { signOut } from 'firebase/auth';
 import Link from 'next/link';
 
 interface Word {
@@ -35,6 +36,15 @@ export default function Dashboard() {
       router.push('/login');
     }
   }, [user, loading, router]);
+
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+      router.push('/login');
+    } catch (error) {
+      console.error("Error signing out:", error);
+    }
+  };
 
   useEffect(() => {
     async function fetchData() {
@@ -103,7 +113,12 @@ export default function Dashboard() {
       <header className="flex justify-between items-center py-6 mb-8 border-b border-[var(--color-surface-border)]">
         <h1 className="text-2xl font-bold tracking-tight">Word of the Day</h1>
         <nav className="flex gap-4 items-center">
-          <Link href="/profile" className="text-sm font-medium hover:text-[var(--color-accent)] transition-colors">Profile</Link>
+          <button 
+            onClick={handleLogout}
+            className="text-sm font-medium opacity-60 hover:opacity-100 hover:text-red-500 transition-colors"
+          >
+            Logout
+          </button>
         </nav>
       </header>
       
