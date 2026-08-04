@@ -1,0 +1,29 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Check if the user is authenticated
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    // Users can read and update their own profile, but not create (Admin SDK will create it or they can create on signup)
+    // Wait, on signup they create it via client. So they should be able to create their own profile.
+    match /profiles/{userId} {
+      allow read, create, update: if isAuthenticated() && request.auth.uid == userId;
+      // Alternatively, can restrict update to only specific fields if needed
+    }
+
+    // Words collection is read-only for authenticated users
+    match /words/{wordId} {
+      allow read: if isAuthenticated();
+      allow write: if false; // Only Admin SDK can write
+    }
+
+    // Daily Words collection is read-only for authenticated users
+    match /dailyWords/{date} {
+      allow read: if isAuthenticated();
+      allow write: if false; // Only Admin SDK can write
+    }
+  }
+}

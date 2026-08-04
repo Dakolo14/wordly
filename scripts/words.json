@@ -1,0 +1,362 @@
+[
+  {
+    "word": "Ephemeral",
+    "partOfSpeech": "adjective",
+    "meaning": "Lasting for a very short time.",
+    "exampleSentence": "The joy of winning was ephemeral, quickly replaced by the stress of the next challenge.",
+    "synonyms": [
+      "fleeting",
+      "transient",
+      "momentary"
+    ],
+    "difficulty": "intermediate"
+  },
+  {
+    "word": "Sycophant",
+    "partOfSpeech": "noun",
+    "meaning": "A person who acts obsequiously toward someone important in order to gain advantage; a 'yes-man'.",
+    "exampleSentence": "The manager disliked sycophants who constantly praised his mediocre ideas.",
+    "synonyms": [
+      "flatterer",
+      "toady",
+      "bootlicker"
+    ],
+    "difficulty": "intermediate"
+  },
+  {
+    "word": "Ubiquitous",
+    "partOfSpeech": "adjective",
+    "meaning": "Present, appearing, or found everywhere.",
+    "exampleSentence": "In the modern world, smartphones have become ubiquitous.",
+    "synonyms": [
+      "omnipresent",
+      "pervasive",
+      "widespread"
+    ],
+    "difficulty": "intermediate"
+  },
+  {
+    "word": "Cacophony",
+    "partOfSpeech": "noun",
+    "meaning": "A harsh, discordant mixture of sounds.",
+    "exampleSentence": "The band's warm-up created a cacophony of instruments tuning up.",
+    "synonyms": [
+      "dissonance",
+      "noise",
+      "din"
+    ],
+    "difficulty": "intermediate"
+  },
+  {
+    "word": "Mellifluous",
+    "partOfSpeech": "adjective",
+    "meaning": "(Of a voice or words) sweet or musical; pleasant to hear.",
+    "exampleSentence": "Her mellifluous voice captivated the entire audience.",
+    "synonyms": [
+      "melodious",
+      "dulcet",
+      "harmonious"
+    ],
+    "difficulty": "advanced"
+  },
+  {
+    "word": "Serendipity",
+    "partOfSpeech": "noun",
+    "meaning": "The occurrence and development of events by chance in a happy or beneficial way.",
+    "exampleSentence": "Discovering the old photograph in the antique shop was a moment of pure serendipity.",
+    "synonyms": [
+      "chance",
+      "luck",
+      "fortuity"
+    ],
+    "difficulty": "intermediate"
+  },
+  {
+    "word": "Plethora",
+    "partOfSpeech": "noun",
+    "meaning": "A large or excessive amount of something.",
+    "exampleSentence": "There was a plethora of options on the menu, making it hard to choose.",
+    "synonyms": [
+      "abundance",
+      "superfluity",
+      "excess"
+    ],
+    "difficulty": "intermediate"
+  },
+  {
+    "word": "Myriad",
+    "partOfSpeech": "noun",
+    "meaning": "A countless or extremely great number of people or things.",
+    "exampleSentence": "The internet offers a myriad of opportunities for learning.",
+    "synonyms": [
+      "multitude",
+      "countless",
+      "numerous"
+    ],
+    "difficulty": "intermediate"
+  },
+  {
+    "word": "Nefarious",
+    "partOfSpeech": "adjective",
+    "meaning": "(Typically of an action or activity) wicked or criminal.",
+    "exampleSentence": "The nefarious plot to steal the jewels was thwarted by the vigilant detective.",
+    "synonyms": [
+      "wicked",
+      "evil",
+      "villainous"
+    ],
+    "difficulty": "advanced"
+  },
+  {
+    "word": "Languid",
+    "partOfSpeech": "adjective",
+    "meaning": "(Of a person, manner, or gesture) having or showing a disinclination for physical exertion or effort; slow and relaxed.",
+    "exampleSentence": "The languid afternoon was spent reading a book by the pool.",
+    "synonyms": [
+      "leisurely",
+      "relaxed",
+      "unhurried"
+    ],
+    "difficulty": "intermediate"
+  },
+  {
+    "word": "Benevolent",
+    "partOfSpeech": "adjective",
+    "meaning": "Well meaning and kindly.",
+    "exampleSentence": "The benevolent donor gave a generous sum to the charity.",
+    "synonyms": [
+      "kind",
+      "compassionate",
+      "philanthropic"
+    ],
+    "difficulty": "intermediate"
+  },
+  {
+    "word": "Malevolent",
+    "partOfSpeech": "adjective",
+    "meaning": "Having or showing a wish to do evil to others.",
+    "exampleSentence": "The villain's malevolent stare sent shivers down my spine.",
+    "synonyms": [
+      "hostile",
+      "malicious",
+      "evil"
+    ],
+    "difficulty": "intermediate"
+  },
+  {
+    "word": "Fastidious",
+    "partOfSpeech": "adjective",
+    "meaning": "Very attentive to and concerned about accuracy and detail; difficult to please.",
+    "exampleSentence": "She was fastidious about her appearance, always impeccably dressed.",
+    "synonyms": [
+      "meticulous",
+      "scrupulous",
+      "punctilious"
+    ],
+    "difficulty": "advanced"
+  },
+  {
+    "word": "Garrulous",
+    "partOfSpeech": "adjective",
+    "meaning": "Excessively talkative, especially on trivial matters.",
+    "exampleSentence": "The garrulous old man could spend hours telling stories to anyone who would listen.",
+    "synonyms": [
+      "talkative",
+      "loquacious",
+      "voluble"
+    ],
+    "difficulty": "advanced"
+  },
+  {
+    "word": "Equanimity",
+    "partOfSpeech": "noun",
+    "meaning": "Calmness and composure, especially in a difficult situation.",
+    "exampleSentence": "He faced the crisis with remarkable equanimity, never losing his cool.",
+    "synonyms": [
+      "composure",
+      "serenity",
+      "tranquility"
+    ],
+    "difficulty": "advanced"
+  },
+  {
+    "word": "Unilateral",
+    "partOfSpeech": "adjective",
+    "meaning": "(Of an action or decision) performed by or affecting only one person, group, or country involved in a situation, without the agreement of another or the others.",
+    "exampleSentence": "The company made a unilateral decision to change employee benefits without consulting the union.",
+    "synonyms": [
+      "one-sided",
+      "independent",
+      "autonomous"
+    ],
+    "difficulty": "intermediate"
+  },
+  {
+    "word": "Bilateral",
+    "partOfSpeech": "adjective",
+    "meaning": "Having or relating to two sides; involving two parties or countries.",
+    "exampleSentence": "The two nations signed a bilateral trade agreement.",
+    "synonyms": [
+      "two-sided",
+      "reciprocal",
+      "joint"
+    ],
+    "difficulty": "intermediate"
+  },
+  {
+    "word": "Quintessential",
+    "partOfSpeech": "adjective",
+    "meaning": "Representing the most perfect or typical example of a quality or class.",
+    "exampleSentence": "A perfectly aged cheddar is the quintessential example of British cheese.",
+    "synonyms": [
+      "typical",
+      "archetypal",
+      "exemplary"
+    ],
+    "difficulty": "advanced"
+  },
+  {
+    "word": "Zenith",
+    "partOfSpeech": "noun",
+    "meaning": "The time at which something is most powerful or successful; the highest point.",
+    "exampleSentence": "He reached the zenith of his career when he won the championship.",
+    "synonyms": [
+      "peak",
+      "apex",
+      "summit"
+    ],
+    "difficulty": "intermediate"
+  },
+  {
+    "word": "Nadir",
+    "partOfSpeech": "noun",
+    "meaning": "The lowest point in the fortunes of a person or organization; the opposite of zenith.",
+    "exampleSentence": "After losing his job and home, he felt he had reached the nadir of his life.",
+    "synonyms": [
+      "rock bottom",
+      "low point",
+      "depths"
+    ],
+    "difficulty": "intermediate"
+  },
+  {
+    "word": "Perfunctory",
+    "partOfSpeech": "adjective",
+    "meaning": "(Of an action or gesture) carried out with a minimum of effort or reflection.",
+    "exampleSentence": "He gave a perfunctory nod of greeting, clearly uninterested in conversation.",
+    "synonyms": [
+      "superficial",
+      "cursory",
+      "half-hearted"
+    ],
+    "difficulty": "advanced"
+  },
+  {
+    "word": "Capricious",
+    "partOfSpeech": "adjective",
+    "meaning": "Given to sudden and unaccountable changes of mood or behavior.",
+    "exampleSentence": "The weather in the mountains can be quite capricious, changing from sunny to stormy in minutes.",
+    "synonyms": [
+      "fickle",
+      "whimsical",
+      "volatile"
+    ],
+    "difficulty": "advanced"
+  },
+  {
+    "word": "Esoteric",
+    "partOfSpeech": "adjective",
+    "meaning": "Intended for or likely to be understood by only a small number of people with a specialized knowledge or interest.",
+    "exampleSentence": "The professor's lecture was so esoteric that only a few graduate students could follow it.",
+    "synonyms": [
+      "obscure",
+      "arcane",
+      "abstruse"
+    ],
+    "difficulty": "advanced"
+  },
+  {
+    "word": "Gregarious",
+    "partOfSpeech": "adjective",
+    "meaning": "(Of a person) fond of company; sociable.",
+    "exampleSentence": "As a gregarious person, she loved hosting parties and meeting new people.",
+    "synonyms": [
+      "sociable",
+      "outgoing",
+      "friendly"
+    ],
+    "difficulty": "intermediate"
+  },
+  {
+    "word": "Prodigious",
+    "partOfSpeech": "adjective",
+    "meaning": "Remarkably or impressively great in extent, size, or degree.",
+    "exampleSentence": "The young artist displayed a prodigious talent for painting.",
+    "synonyms": [
+      "enormous",
+      "immense",
+      "remarkable"
+    ],
+    "difficulty": "intermediate"
+  },
+  {
+    "word": "Propensity",
+    "partOfSpeech": "noun",
+    "meaning": "An inclination or natural tendency to behave in a particular way.",
+    "exampleSentence": "His propensity for procrastination often led to last-minute rushes.",
+    "synonyms": [
+      "tendency",
+      "inclination",
+      "predisposition"
+    ],
+    "difficulty": "advanced"
+  },
+  {
+    "word": "Obfuscate",
+    "partOfSpeech": "verb",
+    "meaning": "Make obscure, unclear, or unintelligible.",
+    "exampleSentence": "The politician tried to obfuscate the truth with confusing statistics.",
+    "synonyms": [
+      "obscure",
+      "confuse",
+      "muddle"
+    ],
+    "difficulty": "advanced"
+  },
+  {
+    "word": "Alacrity",
+    "partOfSpeech": "noun",
+    "meaning": "Brisk and cheerful readiness.",
+    "exampleSentence": "She accepted the new project with alacrity, eager to prove herself.",
+    "synonyms": [
+      "eagerness",
+      "readiness",
+      "enthusiasm"
+    ],
+    "difficulty": "advanced"
+  },
+  {
+    "word": "Sagacious",
+    "partOfSpeech": "adjective",
+    "meaning": "Having or showing keen mental discernment and good judgment; wise.",
+    "exampleSentence": "The sagacious old judge always offered sound advice.",
+    "synonyms": [
+      "wise",
+      "shrewd",
+      "astute"
+    ],
+    "difficulty": "advanced"
+  },
+  {
+    "word": "Vex",
+    "partOfSpeech": "verb",
+    "meaning": "Make (someone) feel annoyed, frustrated, or worried, especially with trivial matters.",
+    "exampleSentence": "The constant delays began to vex the impatient travelers.",
+    "synonyms": [
+      "annoy",
+      "irritate",
+      "exasperate"
+    ],
+    "difficulty": "intermediate"
+  }
+]

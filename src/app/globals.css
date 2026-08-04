@@ -3,24 +3,52 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --accent: #ff6b6b; /* Warm coral */
+  --accent-hover: #fa5252;
+  --surface: #f8f9fa;
+  --surface-border: #e9ecef;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-surface: var(--surface);
+  --color-surface-border: var(--surface-border);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  
+  --animate-pop: pop 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+  
+  @keyframes pop {
+    0% {
+      transform: scale(0.85);
+      opacity: 0;
+    }
+    100% {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
+    --surface: #1f1f1f;
+    --surface-border: #333333;
+    --accent: #ff8787;
+    --accent-hover: #ffa8a8;
   }
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
