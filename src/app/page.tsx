@@ -1,6 +1,28 @@
+'use client';
+
 import Link from 'next/link';
+import { useAuth } from '@/context/AuthContext';
+import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
 
 export default function Home() {
+  const { user, loading } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!loading && user) {
+      router.push('/dashboard');
+    }
+  }, [user, loading, router]);
+
+  if (loading) {
+    return (
+      <main className="flex min-h-screen flex-col items-center justify-center p-6 text-center">
+        <div className="text-lg opacity-60">Loading...</div>
+      </main>
+    );
+  }
+
   return (
     <main className="flex min-h-screen flex-col items-center justify-center p-6 sm:p-24 text-center">
       <div className="max-w-3xl flex flex-col items-center">
