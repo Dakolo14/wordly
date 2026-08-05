@@ -1,116 +1,122 @@
 import { NextResponse } from 'next/server';
 import { adminDb } from '@/lib/firebase/firebase-admin';
 import { Resend } from 'resend';
-import { GoogleGenAI } from '@google/genai';
 
-// Prevent Next.js from trying to pre-render this route at build time
 export const dynamic = 'force-dynamic';
 
-const PROMPT = `
-Generate a single unique, interesting English word suitable for a "Word of the Day" vocabulary-building app.
-Make sure the word is not extremely obscure, but rather a useful word that an educated person might want to add to their active vocabulary (e.g., "ephemeral", "sycophant", "ubiquitous").
-
-The output MUST be a valid JSON object with the following structure:
-{
-  "word": "string",
-  "partOfSpeech": "string (e.g., noun, verb, adjective)",
-  "meaning": "string (clear and concise definition)",
-  "exampleSentence": "string (a great example showing how to use the word)",
-  "synonyms": ["string", "string"],
-  "difficulty": "string (beginner, intermediate, or advanced)"
-}
-
-Do not include markdown blocks, just raw JSON.
-`;
-
 export async function GET(request: Request) {
-  // 1. Validate Cron Secret
   const authHeader = request.headers.get('authorization');
   if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
     return new Response('Unauthorized', { status: 401 });
   }
 
-  // Initialize services inside the handler so they don't crash at build time
   const resend = new Resend(process.env.RESEND_API_KEY);
-  const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
   try {
     const today = new Date().toISOString().split('T')[0];
     
-    // Check if a word already exists for today to prevent duplicates
-    const dailyDoc = await adminDb.collection('dailyWords').doc(today).get();
-    if (dailyDoc.exists) {
-      return NextResponse.json({ message: 'Word for today already generated' });
+    // 1. Fetch all available words into memory
+    const wordsSnapshot = await adminDb.collection('words').get();
+    const wordsMap = new Map<number, any>();
+    wordsSnapshot.docs.forEach(doc => {
+      const data = doc.data();
+      if (data.seqIndex) {
+        wordsMap.set(data.seqIndex, { id: doc.id, ...data });
+      }
+    });
+
+    // 2. Fetch all user profiles
+    const profilesSnapshot = await adminDb.collection('profiles').get();
+    
+    // We will group emails by the word they are receiving today
+    const emailsToSend: { [wordId: string]: { wordData: any, emails: string[] } } = {};
+    
+    let batch = adminDb.batch();
+    let updatesCount = 0;
+
+    for (const userDoc of profilesSnapshot.docs) {
+      const userData = userDoc.data();
+      const currentWordIndex = userData.currentWordIndex || 1;
+      
+      const wordData = wordsMap.get(currentWordIndex);
+      if (!wordData) {
+        console.warn(`No word found for index ${currentWordIndex} for user ${userDoc.id}`);
+        continue;
+      }
+      
+      // Assign word to user's dailyWords subcollection
+      const userDailyWordRef = userDoc.ref.collection('dailyWords').doc(today);
+      
+      // Check if already assigned for today to avoid duplicates
+      const existingDoc = await userDailyWordRef.get();
+      if (!existingDoc.exists) {
+        batch.set(userDailyWordRef, {
+          wordId: wordData.id,
+          createdAt: new Date()
+        });
+        
+        // Increment the user's index
+        batch.update(userDoc.ref, {
+          currentWordIndex: currentWordIndex + 1
+        });
+        
+        updatesCount++;
+
+        // Queue email if enabled
+        if (userData.emailNotifications && userData.email) {
+          if (!emailsToSend[wordData.id]) {
+            emailsToSend[wordData.id] = { wordData, emails: [] };
+          }
+          emailsToSend[wordData.id].emails.push(userData.email);
+        }
+      }
+
+      // Commit in chunks of 400 to stay under Firestore's 500 limit
+      if (updatesCount >= 400) {
+        await batch.commit();
+        batch = adminDb.batch();
+        updatesCount = 0;
+      }
+    }
+    
+    if (updatesCount > 0) {
+      await batch.commit();
     }
 
-    // 2. Generate a word on the fly with Gemini
-    const response = await ai.models.generateContent({
-      model: 'gemini-2.5-flash',
-      contents: PROMPT,
-    });
-    
-    let text = response.text || '{}';
-    if (text.startsWith('```json')) text = text.substring(7);
-    if (text.startsWith('```')) text = text.substring(3);
-    if (text.endsWith('```')) text = text.substring(0, text.length - 3);
-    
-    const wordData = JSON.parse(text.trim());
-    
-    const wordId = wordData.word.toLowerCase().replace(/\s+/g, '-');
-
-    // 3. Save the generated word and create dailyWord
-    const batch = adminDb.batch();
-    
-    const wordRef = adminDb.collection('words').doc(wordId);
-    batch.set(wordRef, {
-      ...wordData,
-      used: true,
-      createdAt: new Date()
-    }, { merge: true });
-    
-    const dailyWordRef = adminDb.collection('dailyWords').doc(today);
-    batch.set(dailyWordRef, {
-      wordId: wordId,
-      createdAt: new Date()
-    });
-
-    await batch.commit();
-
-    // 4. Send Emails via Resend
-    const profilesSnapshot = await adminDb.collection('profiles').where('emailNotifications', '==', true).get();
-    const emails = profilesSnapshot.docs.map(doc => doc.data().email).filter(Boolean);
-
-    if (emails.length > 0) {
-      const htmlContent = `
-        <div style="font-family: sans-serif; max-w: 600px; margin: 0 auto; text-align: center; color: #171717;">
-          <h2 style="color: #ff6b6b; text-transform: uppercase; letter-spacing: 2px; font-size: 14px;">Word of the Day</h2>
-          <h1 style="font-size: 48px; margin-bottom: 8px; text-transform: capitalize;">${wordData.word}</h1>
-          <p style="font-style: italic; color: #666; margin-bottom: 24px;">${wordData.partOfSpeech}</p>
-          <p style="font-size: 20px; line-height: 1.5; margin-bottom: 32px;">${wordData.meaning}</p>
-          
-          <div style="background-color: #f8f9fa; padding: 24px; border-radius: 12px; margin-bottom: 32px; text-align: left;">
-            <p style="text-transform: uppercase; font-size: 12px; font-weight: bold; color: #888; margin-bottom: 8px;">Example</p>
-            <p style="font-size: 16px; font-style: italic;">"${wordData.exampleSentence}"</p>
+    // 3. Send out grouped emails
+    for (const [wordId, data] of Object.entries(emailsToSend)) {
+      if (data.emails.length > 0) {
+        const htmlContent = `
+          <div style="font-family: sans-serif; max-w: 600px; margin: 0 auto; text-align: center; color: #171717;">
+            <h2 style="color: #ff6b6b; text-transform: uppercase; letter-spacing: 2px; font-size: 14px;">Word of the Day</h2>
+            <h1 style="font-size: 48px; margin-bottom: 8px; text-transform: capitalize;">${data.wordData.word}</h1>
+            <p style="font-style: italic; color: #666; margin-bottom: 24px;">${data.wordData.partOfSpeech}</p>
+            <p style="font-size: 20px; line-height: 1.5; margin-bottom: 32px;">${data.wordData.meaning}</p>
+            
+            <div style="background-color: #f8f9fa; padding: 24px; border-radius: 12px; margin-bottom: 32px; text-align: left;">
+              <p style="text-transform: uppercase; font-size: 12px; font-weight: bold; color: #888; margin-bottom: 8px;">Example</p>
+              <p style="font-size: 16px; font-style: italic;">"${data.wordData.exampleSentence}"</p>
+            </div>
+            
+            <a href="${process.env.NEXT_PUBLIC_APP_URL || 'https://your-domain.com'}/dashboard" style="display: inline-block; padding: 12px 24px; background-color: #ff6b6b; color: #fff; text-decoration: none; border-radius: 99px; font-weight: bold;">View in App</a>
+            
+            <p style="margin-top: 48px; font-size: 12px; color: #999;">
+              You are receiving this because you enabled daily word notifications. 
+              You can change this in your profile settings.
+            </p>
           </div>
-          
-          <a href="${process.env.NEXT_PUBLIC_APP_URL || 'https://your-domain.com'}/dashboard" style="display: inline-block; padding: 12px 24px; background-color: #ff6b6b; color: #fff; text-decoration: none; border-radius: 99px; font-weight: bold;">View in App</a>
-          
-          <p style="margin-top: 48px; font-size: 12px; color: #999;">
-            You are receiving this because you enabled daily word notifications. 
-            You can change this in your profile settings.
-          </p>
-        </div>
-      `;
+        `;
 
-      await resend.emails.send({
-        from: 'Word of the Day <onboarding@resend.dev>',
-        to: emails,
-        subject: `Word of the Day: ${wordData.word}`,
-        html: htmlContent,
-      });
+        await resend.emails.send({
+          from: 'Word of the Day <onboarding@resend.dev>',
+          to: data.emails,
+          subject: `Word of the Day: ${data.wordData.word}`,
+          html: htmlContent,
+        });
+      }
     }
 
-    return NextResponse.json({ success: true, word: wordData.word });
+    return NextResponse.json({ success: true, message: 'Processed daily words for all users.' });
   } catch (error: any) {
     console.error('Daily word error:', error);
     return NextResponse.json({ error: error.message }, { status: 500 });

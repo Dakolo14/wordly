@@ -63,9 +63,9 @@ export default function Dashboard() {
         const today = new Date().toISOString().split('T')[0];
         
         // Fetch dailyDoc and historyQuery concurrently
-        const dailyDocRef = doc(db, 'dailyWords', today);
+        const dailyDocRef = doc(db, 'profiles', user.uid, 'dailyWords', today);
         const historyQuery = query(
-          collection(db, 'dailyWords'),
+          collection(db, 'profiles', user.uid, 'dailyWords'),
           orderBy('createdAt', 'desc'),
           limit(7)
         );

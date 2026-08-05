@@ -34,19 +34,33 @@ async function main() {
   const batchSize = 100;
   let batch = db.batch();
 
+  let maxSeqIndex = 0;
+  const wordsSnapshot = await db.collection('words').orderBy('seqIndex', 'desc').limit(1).get();
+  if (!wordsSnapshot.empty) {
+    maxSeqIndex = wordsSnapshot.docs[0].data().seqIndex || 0;
+  }
+
   for (let i = 0; i < words.length; i++) {
     const word = words[i];
     
     // Check if word already exists to prevent exact duplicates? 
     // We'll just generate a unique document ID based on the word itself
-    const docId = word.word.toLowerCase().replace(/\\s+/g, '-');
+    const docId = word.word.toLowerCase().replace(/\s+/g, '-');
     const docRef = db.collection('words').doc(docId);
     
-    batch.set(docRef, {
-      ...word,
-      used: false,
-      createdAt: FieldValue.serverTimestamp()
-    }, { merge: true }); // merge true so we don't overwrite if it exists but is already used
+    // Only set seqIndex if we are creating it
+    const docSnap = await docRef.get();
+    
+    if (!docSnap.exists) {
+      maxSeqIndex++;
+      batch.set(docRef, {
+        ...word,
+        used: false,
+        seqIndex: maxSeqIndex,
+        createdAt: FieldValue.serverTimestamp()
+      });
+    
+    }
     
     count++;
     

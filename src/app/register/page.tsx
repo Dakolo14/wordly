@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { doc, setDoc, serverTimestamp } from 'firebase/firestore';
+import { doc, setDoc, getDocs, collection, query, where, serverTimestamp } from 'firebase/firestore';
 import { auth, db } from '@/lib/firebase/firebase';
 import { useAuth } from '@/context/AuthContext';
 import { useRouter } from 'next/navigation';
@@ -36,8 +36,21 @@ export default function Register() {
         displayName: displayName || email.split('@')[0],
         email: newUser.email,
         emailNotifications: true,
+        currentWordIndex: 2, // The next word they will get from cron is #2
         createdAt: serverTimestamp(),
       });
+      
+      // Assign them their first word immediately
+      const wordsQuery = query(collection(db, 'words'), where('seqIndex', '==', 1));
+      const wordsSnap = await getDocs(wordsQuery);
+      if (!wordsSnap.empty) {
+        const firstWordDoc = wordsSnap.docs[0];
+        const today = new Date().toISOString().split('T')[0];
+        await setDoc(doc(db, `profiles/${newUser.uid}/dailyWords`, today), {
+          wordId: firstWordDoc.id,
+          createdAt: new Date()
+        });
+      }
       
       router.push('/dashboard');
     } catch (err: any) {
