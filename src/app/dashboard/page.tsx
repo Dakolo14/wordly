@@ -62,46 +62,59 @@ export default function Dashboard() {
       try {
         const today = new Date().toISOString().split('T')[0];
         
-        // Fetch today's word
+        // Fetch dailyDoc and historyQuery concurrently
         const dailyDocRef = doc(db, 'dailyWords', today);
-        const dailyDoc = await getDoc(dailyDocRef);
-        
-        if (dailyDoc.exists()) {
-          const wordId = dailyDoc.data().wordId;
-          const wordDocRef = doc(db, 'words', wordId);
-          const wordDoc = await getDoc(wordDocRef);
-          
-          if (wordDoc.exists()) {
-            setTodayWord({
-              date: today,
-              wordId,
-              word: { id: wordDoc.id, ...wordDoc.data() } as Word,
-            });
-          }
-        }
-        
-        // Fetch history (last 7 days)
         const historyQuery = query(
           collection(db, 'dailyWords'),
           orderBy('createdAt', 'desc'),
           limit(7)
         );
-        const historySnapshot = await getDocs(historyQuery);
+
+        const [dailyDoc, historySnapshot] = await Promise.all([
+          getDoc(dailyDocRef),
+          getDocs(historyQuery)
+        ]);
         
+        // Concurrently fetch the word details for today and history
+        const fetchWordDetailsPromises: Promise<void>[] = [];
         const historyData: DailyWord[] = [];
+
+        if (dailyDoc.exists()) {
+          const wordId = dailyDoc.data().wordId;
+          fetchWordDetailsPromises.push(
+            getDoc(doc(db, 'words', wordId)).then((wordDoc) => {
+              if (wordDoc.exists()) {
+                setTodayWord({
+                  date: today,
+                  wordId,
+                  word: { id: wordDoc.id, ...wordDoc.data() } as Word,
+                });
+              }
+            })
+          );
+        }
+        
         for (const docSnap of historySnapshot.docs) {
           if (docSnap.id !== today) { // skip today in history
             const wordId = docSnap.data().wordId;
-            const wordDoc = await getDoc(doc(db, 'words', wordId));
-            if (wordDoc.exists()) {
-              historyData.push({
-                date: docSnap.id,
-                wordId,
-                word: { id: wordDoc.id, ...wordDoc.data() } as Word,
-              });
-            }
+            fetchWordDetailsPromises.push(
+              getDoc(doc(db, 'words', wordId)).then((wordDoc) => {
+                if (wordDoc.exists()) {
+                  historyData.push({
+                    date: docSnap.id,
+                    wordId,
+                    word: { id: wordDoc.id, ...wordDoc.data() } as Word,
+                  });
+                }
+              })
+            );
           }
         }
+        
+        await Promise.all(fetchWordDetailsPromises);
+        
+        // Sort history Data descending by date because Promise.all might resolve out of order
+        historyData.sort((a, b) => b.date.localeCompare(a.date));
         setHistory(historyData);
         
       } catch (error) {
