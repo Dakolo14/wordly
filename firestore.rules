@@ -12,6 +12,11 @@ service cloud.firestore {
     match /profiles/{userId} {
       allow read, create, update: if isAuthenticated() && request.auth.uid == userId;
       // Alternatively, can restrict update to only specific fields if needed
+      
+      // Allow user to read and create their own personal daily words
+      match /dailyWords/{date} {
+        allow read, create, update: if isAuthenticated() && request.auth.uid == userId;
+      }
     }
 
     // Words collection is read-only for authenticated users

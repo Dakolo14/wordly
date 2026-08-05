@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { useRouter } from 'next/navigation';
-import { doc, getDoc, collection, query, orderBy, limit, getDocs } from 'firebase/firestore';
+import { doc, getDoc, getDocs, collection, query, orderBy, limit, setDoc, where } from 'firebase/firestore';
 import { auth, db } from '@/lib/firebase/firebase';
 import { signOut } from 'firebase/auth';
 import Link from 'next/link';
@@ -61,6 +61,30 @@ export default function Dashboard() {
       if (!user) return;
       try {
         const today = new Date().toISOString().split('T')[0];
+        
+        // Auto-heal: Ensure user profile exists
+        const userProfileRef = doc(db, 'profiles', user.uid);
+        const userProfileSnap = await getDoc(userProfileRef);
+        
+        if (!userProfileSnap.exists()) {
+          console.log("Profile missing, auto-healing...");
+          await setDoc(userProfileRef, {
+            displayName: user.displayName || user.email?.split('@')[0] || 'User',
+            email: user.email,
+            emailNotifications: true,
+            currentWordIndex: 2,
+          });
+          
+          const wordsQuery = query(collection(db, 'words'), where('seqIndex', '==', 1));
+          const wordsSnap = await getDocs(wordsQuery);
+          if (!wordsSnap.empty) {
+            const firstWordDoc = wordsSnap.docs[0];
+            await setDoc(doc(db, 'profiles', user.uid, 'dailyWords', today), {
+              wordId: firstWordDoc.id,
+              createdAt: new Date()
+            });
+          }
+        }
         
         // Fetch dailyDoc and historyQuery concurrently
         const dailyDocRef = doc(db, 'profiles', user.uid, 'dailyWords', today);
