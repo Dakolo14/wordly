@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { adminDb } from '@/lib/firebase/firebase-admin';
-import { Resend } from 'resend';
+import nodemailer from 'nodemailer';
 
 export const dynamic = 'force-dynamic';
 
@@ -10,7 +10,13 @@ export async function GET(request: Request) {
     return new Response('Unauthorized', { status: 401 });
   }
 
-  const resend = new Resend(process.env.RESEND_API_KEY);
+  const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+      user: process.env.EMAIL_USER,
+      pass: process.env.EMAIL_APP_PASSWORD,
+    },
+  });
 
   try {
     const today = new Date().toISOString().split('T')[0];
@@ -107,8 +113,8 @@ export async function GET(request: Request) {
           </div>
         `;
 
-        await resend.emails.send({
-          from: 'Word of the Day <onboarding@resend.dev>',
+        await transporter.sendMail({
+          from: `"Word of the Day" <${process.env.EMAIL_USER}>`,
           to: data.emails,
           subject: `Word of the Day: ${data.wordData.word}`,
           html: htmlContent,
