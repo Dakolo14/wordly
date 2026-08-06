@@ -64,8 +64,21 @@ export default function Dashboard() {
           const today = new Date().toISOString().split('T')[0];
           
           const userProfileRef = doc(db, 'profiles', user.uid);
-          const userProfileSnap = await getDoc(userProfileRef);
+          const dailyDocRef = doc(db, 'profiles', user.uid, 'dailyWords', today);
+          const historyQuery = query(
+            collection(db, 'profiles', user.uid, 'dailyWords'),
+            orderBy('createdAt', 'desc'),
+            limit(7)
+          );
           
+          // Fire all 3 top-level network requests concurrently for maximum speed
+          let [userProfileSnap, dailyDoc, historySnapshot] = await Promise.all([
+            getDoc(userProfileRef),
+            getDoc(dailyDocRef),
+            getDocs(historyQuery)
+          ]);
+          
+          // Fallback auto-heal if it's their very first time
           if (!userProfileSnap.exists()) {
             await setDoc(userProfileRef, {
               displayName: user.displayName || user.email?.split('@')[0] || 'User',
@@ -83,19 +96,9 @@ export default function Dashboard() {
                 createdAt: new Date()
               });
             }
+            // Refetch the daily doc now that it exists
+            dailyDoc = await getDoc(dailyDocRef);
           }
-          
-          const dailyDocRef = doc(db, 'profiles', user.uid, 'dailyWords', today);
-          const historyQuery = query(
-            collection(db, 'profiles', user.uid, 'dailyWords'),
-            orderBy('createdAt', 'desc'),
-            limit(7)
-          );
-
-          const [dailyDoc, historySnapshot] = await Promise.all([
-            getDoc(dailyDocRef),
-            getDocs(historyQuery)
-          ]);
           
           const fetchWordDetailsPromises: Promise<void>[] = [];
           const historyData: DailyWord[] = [];
