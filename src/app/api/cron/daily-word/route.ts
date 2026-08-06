@@ -42,11 +42,18 @@ export async function GET(request: Request) {
 
     for (const userDoc of profilesSnapshot.docs) {
       const userData = userDoc.data();
-      const currentWordIndex = userData.currentWordIndex || 1;
+      let currentWordIndex = userData.currentWordIndex || 1;
       
-      const wordData = wordsMap.get(currentWordIndex);
+      let wordData = wordsMap.get(currentWordIndex);
+      
+      // If they run out of words, loop back to the beginning!
+      if (!wordData && wordsMap.size > 0) {
+        currentWordIndex = 1;
+        wordData = wordsMap.get(1);
+      }
+
       if (!wordData) {
-        console.warn(`No word found for index ${currentWordIndex} for user ${userDoc.id}`);
+        console.warn(`Database is completely empty for user ${userDoc.id}`);
         continue;
       }
       

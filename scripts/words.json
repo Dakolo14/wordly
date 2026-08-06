@@ -3,10 +3,10 @@
     "word": "Ephemeral",
     "partOfSpeech": "adjective",
     "meaning": "Lasting for a very short time.",
-    "exampleSentence": "The beauty of a sunset is ephemeral, fading quickly into twilight.",
+    "exampleSentence": "The beauty of the cherry blossoms is ephemeral, a fleeting spectacle each spring.",
     "synonyms": [
-      "fleeting",
       "transient",
+      "fleeting",
       "short-lived"
     ],
     "difficulty": "intermediate"
@@ -15,11 +15,11 @@
     "word": "Sycophant",
     "partOfSpeech": "noun",
     "meaning": "A person who acts obsequiously toward someone important in order to gain advantage; a flatterer.",
-    "exampleSentence": "The director was surrounded by sycophants who praised his every idea, no matter how flawed.",
+    "exampleSentence": "He was surrounded by sycophants who praised his every decision, no matter how foolish.",
     "synonyms": [
       "flatterer",
       "toady",
-      "lackey"
+      "fawner"
     ],
     "difficulty": "advanced"
   },
@@ -27,7 +27,7 @@
     "word": "Ubiquitous",
     "partOfSpeech": "adjective",
     "meaning": "Present, appearing, or found everywhere.",
-    "exampleSentence": "In the modern age, smartphones have become truly ubiquitous.",
+    "exampleSentence": "In the modern world, smartphones have become ubiquitous, an essential part of daily life.",
     "synonyms": [
       "omnipresent",
       "pervasive",
@@ -39,11 +39,11 @@
     "word": "Serendipity",
     "partOfSpeech": "noun",
     "meaning": "The occurrence and development of events by chance in a happy or beneficial way.",
-    "exampleSentence": "It was pure serendipity that they met at a coffee shop and discovered their shared passion for antique books.",
+    "exampleSentence": "Finding my old friend in a foreign city was a moment of pure serendipity.",
     "synonyms": [
       "chance",
       "luck",
-      "fortuity"
+      "fortune"
     ],
     "difficulty": "advanced"
   },
@@ -51,11 +51,11 @@
     "word": "Mellifluous",
     "partOfSpeech": "adjective",
     "meaning": "(Of a voice or words) sweet or musical; pleasant to hear.",
-    "exampleSentence": "The opera singer's mellifluous voice filled the concert hall, captivating the audience.",
+    "exampleSentence": "Her mellifluous voice captivated the audience, making even the most complex aria sound effortless.",
     "synonyms": [
       "harmonious",
       "euphonious",
-      "dulcet"
+      "silken"
     ],
     "difficulty": "advanced"
   },
@@ -63,151 +63,79 @@
     "word": "Pernicious",
     "partOfSpeech": "adjective",
     "meaning": "Having a harmful effect, especially in a gradual or subtle way.",
-    "exampleSentence": "The pernicious rumors slowly eroded her reputation.",
+    "exampleSentence": "The pernicious rumors slowly eroded his reputation, though they were entirely unfounded.",
     "synonyms": [
-      "deleterious",
       "damaging",
-      "destructive"
+      "destructive",
+      "malignant"
     ],
     "difficulty": "advanced"
   },
   {
-    "word": "Cacophony",
-    "partOfSpeech": "noun",
-    "meaning": "A harsh, discordant mixture of sounds.",
-    "exampleSentence": "The school orchestra produced a cacophony of instruments before the conductor took the stage.",
+    "word": "Salient",
+    "partOfSpeech": "adjective",
+    "meaning": "Most noticeable or important.",
+    "exampleSentence": "The most salient feature of the new policy is its focus on renewable energy.",
     "synonyms": [
-      "dissonance",
-      "discord",
-      "racket"
+      "prominent",
+      "conspicuous",
+      "striking"
     ],
     "difficulty": "intermediate"
   },
   {
     "word": "Proclivity",
     "partOfSpeech": "noun",
-    "meaning": "A tendency to choose or do something regularly; an inclination or predisposition.",
+    "meaning": "A tendency to choose or do something regularly; an inclination or predisposition toward a particular thing.",
     "exampleSentence": "His natural proclivity for mischief often landed him in detention.",
     "synonyms": [
-      "tendency",
       "inclination",
+      "tendency",
       "propensity"
     ],
     "difficulty": "advanced"
   },
   {
-    "word": "Gregarious",
-    "partOfSpeech": "adjective",
-    "meaning": "(Of a person) fond of company; sociable.",
-    "exampleSentence": "Being a gregarious host, she loved throwing large dinner parties.",
-    "synonyms": [
-      "sociable",
-      "outgoing",
-      "extroverted"
-    ],
-    "difficulty": "intermediate"
-  },
-  {
-    "word": "Alacrity",
+    "word": "Idiosyncrasy",
     "partOfSpeech": "noun",
-    "meaning": "Brisk and cheerful readiness.",
-    "exampleSentence": "She accepted the new challenge with alacrity, eager to prove her skills.",
+    "meaning": "A mode of behavior or way of thought peculiar to an individual.",
+    "exampleSentence": "One of his idiosyncrasies was his habit of always wearing mismatched socks.",
     "synonyms": [
-      "eagerness",
-      "readiness",
-      "enthusiasm"
+      "peculiarity",
+      "quirk",
+      "eccentricity"
     ],
     "difficulty": "advanced"
   },
   {
-    "word": "Vacillate",
-    "partOfSpeech": "verb",
-    "meaning": "Alternate or waver between different opinions or actions; be indecisive.",
-    "exampleSentence": "He tends to vacillate between two choices, unable to make a firm decision.",
-    "synonyms": [
-      "waver",
-      "hesitate",
-      "dither"
-    ],
-    "difficulty": "intermediate"
-  },
-  {
-    "word": "Obfuscate",
-    "partOfSpeech": "verb",
-    "meaning": "Make unclear, obscure, or unintelligible.",
-    "exampleSentence": "The politician tried to obfuscate the truth with vague statements.",
-    "synonyms": [
-      "confuse",
-      "muddle",
-      "bewilder"
-    ],
-    "difficulty": "advanced"
-  },
-  {
-    "word": "Quandary",
+    "word": "Austerity",
     "partOfSpeech": "noun",
-    "meaning": "A state of perplexity or uncertainty over what to do in a difficult situation.",
-    "exampleSentence": "She found herself in a quandary, unsure whether to take the higher-paying job or the one she loved.",
+    "meaning": "Sternness or severity of manner or attitude; extreme plainness and simplicity of style or appearance.",
+    "exampleSentence": "The government imposed strict austerity measures to reduce the national debt.",
     "synonyms": [
-      "dilemma",
-      "predicament",
-      "pickle"
+      "rigor",
+      "severity",
+      "frugality"
     ],
     "difficulty": "intermediate"
   },
   {
-    "word": "Panacea",
-    "partOfSpeech": "noun",
-    "meaning": "A remedy for all ills or difficulties.",
-    "exampleSentence": "Many people hope that technology will be a panacea for all of society's problems, but it often creates new ones.",
+    "word": "Capricious",
+    "partOfSpeech": "adjective",
+    "meaning": "Given to sudden and unaccountable changes of mood or behavior.",
+    "exampleSentence": "Her capricious nature made it difficult to predict her reactions.",
     "synonyms": [
-      "cure-all",
-      "universal remedy",
-      "elixir"
+      "fickle",
+      "unpredictable",
+      "whimsical"
     ],
     "difficulty": "advanced"
-  },
-  {
-    "word": "Esoteric",
-    "partOfSpeech": "adjective",
-    "meaning": "Intended for or likely to be understood by only a small number of people with a specialized knowledge or interest.",
-    "exampleSentence": "The book was full of esoteric references that only a few scholars could fully grasp.",
-    "synonyms": [
-      "abstruse",
-      "arcane",
-      "recondite"
-    ],
-    "difficulty": "advanced"
-  },
-  {
-    "word": "Magnanimous",
-    "partOfSpeech": "adjective",
-    "meaning": "Generous or forgiving, especially toward a rival or less powerful person.",
-    "exampleSentence": "Despite their rivalry, the magnanimous winner praised the efforts of his opponent.",
-    "synonyms": [
-      "generous",
-      "benevolent",
-      "chivalrous"
-    ],
-    "difficulty": "advanced"
-  },
-  {
-    "word": "Ambiguous",
-    "partOfSpeech": "adjective",
-    "meaning": "Open to more than one interpretation; having a double meaning.",
-    "exampleSentence": "The manager's comments were ambiguous, leaving everyone unsure of the new policy.",
-    "synonyms": [
-      "unclear",
-      "equivocal",
-      "vague"
-    ],
-    "difficulty": "intermediate"
   },
   {
     "word": "Equivocate",
     "partOfSpeech": "verb",
-    "meaning": "Use ambiguous language so as to conceal the truth or avoid committing oneself.",
-    "exampleSentence": "When questioned about the missing funds, the treasurer began to equivocate, refusing to give a direct answer.",
+    "meaning": "To use ambiguous language so as to conceal the truth or avoid committing oneself.",
+    "exampleSentence": "When asked about the missing funds, the politician began to equivocate, refusing to give a direct answer.",
     "synonyms": [
       "prevaricate",
       "hedge",
@@ -216,147 +144,219 @@
     "difficulty": "advanced"
   },
   {
-    "word": "Sagacious",
+    "word": "Esoteric",
     "partOfSpeech": "adjective",
-    "meaning": "Having or showing keen mental discernment and good judgment; shrewd.",
-    "exampleSentence": "The sagacious old professor always offered wise advice to his students.",
+    "meaning": "Intended for or likely to be understood by only a small number of people with a specialized knowledge or interest.",
+    "exampleSentence": "The philosopher's work was filled with esoteric concepts that only his students could grasp.",
     "synonyms": [
-      "wise",
-      "shrewd",
-      "astute"
+      "obscure",
+      "abstruse",
+      "arcane"
     ],
     "difficulty": "advanced"
+  },
+  {
+    "word": "Gregarious",
+    "partOfSpeech": "adjective",
+    "meaning": "(Of a person) fond of company; sociable.",
+    "exampleSentence": "As a gregarious individual, he loved hosting large dinner parties and social gatherings.",
+    "synonyms": [
+      "sociable",
+      "outgoing",
+      "extroverted"
+    ],
+    "difficulty": "intermediate"
+  },
+  {
+    "word": "Hegemony",
+    "partOfSpeech": "noun",
+    "meaning": "Leadership or dominance, especially by one country or social group over others.",
+    "exampleSentence": "The historical hegemony of the Roman Empire extended across much of Europe.",
+    "synonyms": [
+      "dominance",
+      "supremacy",
+      "ascendancy"
+    ],
+    "difficulty": "advanced"
+  },
+  {
+    "word": "Ignominious",
+    "partOfSpeech": "adjective",
+    "meaning": "Deserving or causing public disgrace or shame.",
+    "exampleSentence": "The team suffered an ignominious defeat, losing by a huge margin in the final game.",
+    "synonyms": [
+      "humiliating",
+      "disgraceful",
+      "shameful"
+    ],
+    "difficulty": "advanced"
+  },
+  {
+    "word": "Languid",
+    "partOfSpeech": "adjective",
+    "meaning": "(Of a person, manner, or gesture) having a disinclination for physical exertion or effort; slow and relaxed.",
+    "exampleSentence": "The hot summer afternoon made everyone feel languid, preferring to rest in the shade.",
+    "synonyms": [
+      "lethargic",
+      "sluggish",
+      "listless"
+    ],
+    "difficulty": "advanced"
+  },
+  {
+    "word": "Meticulous",
+    "partOfSpeech": "adjective",
+    "meaning": "Showing great attention to detail; very careful and precise.",
+    "exampleSentence": "The artist was meticulous in her work, ensuring every brushstroke was perfect.",
+    "synonyms": [
+      "thorough",
+      "conscientious",
+      "fastidious"
+    ],
+    "difficulty": "intermediate"
+  },
+  {
+    "word": "Obfuscate",
+    "partOfSpeech": "verb",
+    "meaning": "To make something obscure, unclear, or unintelligible.",
+    "exampleSentence": "Some politicians deliberately obfuscate the truth to confuse voters.",
+    "synonyms": [
+      "confuse",
+      "muddle",
+      "bewilder"
+    ],
+    "difficulty": "advanced"
+  },
+  {
+    "word": "Paradigm",
+    "partOfSpeech": "noun",
+    "meaning": "A typical example or pattern of something; a model; a distinct set of concepts or thought patterns.",
+    "exampleSentence": "The discovery of penicillin caused a paradigm shift in medicine, leading to new ways of treating infections.",
+    "synonyms": [
+      "model",
+      "pattern",
+      "archetype"
+    ],
+    "difficulty": "intermediate"
   },
   {
     "word": "Plethora",
     "partOfSpeech": "noun",
-    "meaning": "An excess of something.",
-    "exampleSentence": "The restaurant offered a plethora of desserts, making it hard to choose just one.",
+    "meaning": "An excessive quantity or surplus of something.",
+    "exampleSentence": "The bookstore had a plethora of genres, ensuring there was something for every reader.",
     "synonyms": [
       "abundance",
-      "surplus",
-      "oversupply"
+      "excess",
+      "surfeit"
     ],
     "difficulty": "intermediate"
   },
   {
-    "word": "Mitigate",
-    "partOfSpeech": "verb",
-    "meaning": "Make less severe, serious, or painful.",
-    "exampleSentence": "They tried to mitigate the impact of the flood by building temporary barriers.",
+    "word": "Quandary",
+    "partOfSpeech": "noun",
+    "meaning": "A state of perplexity or uncertainty over what to do in a difficult situation.",
+    "exampleSentence": "She found herself in a quandary, unsure whether to accept the new job offer or stay with her current company.",
     "synonyms": [
-      "alleviate",
-      "reduce",
-      "lessen"
+      "dilemma",
+      "predicament",
+      "pickle"
     ],
     "difficulty": "intermediate"
   },
   {
-    "word": "Zealous",
-    "partOfSpeech": "adjective",
-    "meaning": "Having or showing great energy or enthusiasm in pursuit of a cause or objective.",
-    "exampleSentence": "The zealous activist dedicated his life to environmental protection.",
+    "word": "Rancor",
+    "partOfSpeech": "noun",
+    "meaning": "Bitterness or resentfulness, especially when long-standing.",
+    "exampleSentence": "Despite the passing years, he still held a deep rancor towards his former business partner.",
     "synonyms": [
-      "ardent",
-      "fervent",
-      "passionate"
-    ],
-    "difficulty": "intermediate"
-  },
-  {
-    "word": "Superfluous",
-    "partOfSpeech": "adjective",
-    "meaning": "Unnecessary, especially through being more than enough.",
-    "exampleSentence": "The detailed explanation was superfluous; a simple summary would have sufficed.",
-    "synonyms": [
-      "redundant",
-      "excessive",
-      "unneeded"
-    ],
-    "difficulty": "intermediate"
-  },
-  {
-    "word": "Capricious",
-    "partOfSpeech": "adjective",
-    "meaning": "Given to sudden and unaccountable changes of mood or behavior.",
-    "exampleSentence": "Her capricious nature made her an unpredictable friend, always changing plans at the last minute.",
-    "synonyms": [
-      "fickle",
-      "unpredictable",
-      "mercurial"
+      "malice",
+      "hatred",
+      "animosity"
     ],
     "difficulty": "advanced"
   },
   {
-    "word": "Ruminate",
-    "partOfSpeech": "verb",
-    "meaning": "Think deeply about something.",
-    "exampleSentence": "He needed time to ruminate on the difficult decision before giving his answer.",
+    "word": "Sardonic",
+    "partOfSpeech": "adjective",
+    "meaning": "Grimly mocking or cynical.",
+    "exampleSentence": "His sardonic humor was often misunderstood, coming across as harsh rather than witty.",
     "synonyms": [
-      "contemplate",
-      "ponder",
-      "meditate"
+      "cynical",
+      "scornful",
+      "sarcastic"
+    ],
+    "difficulty": "advanced"
+  },
+  {
+    "word": "Transient",
+    "partOfSpeech": "adjective",
+    "meaning": "Lasting only for a short time; impermanent.",
+    "exampleSentence": "The beauty of the sunset was transient, fading quickly into twilight.",
+    "synonyms": [
+      "ephemeral",
+      "fleeting",
+      "temporary"
     ],
     "difficulty": "intermediate"
   },
   {
-    "word": "Inadvertent",
-    "partOfSpeech": "adjective",
-    "meaning": "Not resulting from or achieved through deliberate planning.",
-    "exampleSentence": "An inadvertent error in the calculations led to incorrect results.",
+    "word": "Vacillate",
+    "partOfSpeech": "verb",
+    "meaning": "To waver between different opinions or actions; be indecisive.",
+    "exampleSentence": "He would often vacillate between different career paths, unable to commit to one.",
     "synonyms": [
-      "unintentional",
-      "accidental",
-      "unplanned"
+      "hesitate",
+      "waver",
+      "dither"
+    ],
+    "difficulty": "advanced"
+  },
+  {
+    "word": "Wistful",
+    "partOfSpeech": "adjective",
+    "meaning": "Having or showing a feeling of vague or regretful longing.",
+    "exampleSentence": "She gave a wistful sigh as she looked at old photographs, remembering happier times.",
+    "synonyms": [
+      "nostalgic",
+      "melancholy",
+      "yearning"
+    ],
+    "difficulty": "intermediate"
+  },
+  {
+    "word": "Zealot",
+    "partOfSpeech": "noun",
+    "meaning": "A person who is fanatical and uncompromising in pursuit of their religious, political, or other ideals.",
+    "exampleSentence": "He was a political zealot, unwilling to consider any viewpoint contrary to his own.",
+    "synonyms": [
+      "fanatic",
+      "extremist",
+      "dogmatist"
     ],
     "difficulty": "intermediate"
   },
   {
     "word": "Disparate",
     "partOfSpeech": "adjective",
-    "meaning": "Essentially different in kind; not allowing comparison.",
-    "exampleSentence": "The team members came from disparate backgrounds, yet they worked together harmoniously.",
+    "meaning": "Essentially different in kind; not able to be compared.",
+    "exampleSentence": "The team comprised individuals with disparate skills, but they worked together effectively.",
     "synonyms": [
+      "divergent",
       "dissimilar",
-      "diverse",
       "unrelated"
     ],
     "difficulty": "advanced"
   },
   {
-    "word": "Spurious",
-    "partOfSpeech": "adjective",
-    "meaning": "Not being what it purports to be; false or fake.",
-    "exampleSentence": "The detective quickly identified the document as spurious, a clever forgery.",
+    "word": "Cacophony",
+    "partOfSpeech": "noun",
+    "meaning": "A harsh, discordant mixture of sounds.",
+    "exampleSentence": "The construction site produced a cacophony of drills, hammers, and shouting, making it hard to concentrate.",
     "synonyms": [
-      "false",
-      "fake",
-      "bogus"
+      "din",
+      "discord",
+      "racket"
     ],
-    "difficulty": "advanced"
-  },
-  {
-    "word": "Ostentatious",
-    "partOfSpeech": "adjective",
-    "meaning": "Characterized by vulgar or pretentious display; designed to impress or attract notice.",
-    "exampleSentence": "He made an ostentatious display of his new wealth, buying a bright red sports car and a massive mansion.",
-    "synonyms": [
-      "showy",
-      "flamboyant",
-      "pretentious"
-    ],
-    "difficulty": "advanced"
-  },
-  {
-    "word": "Parsimonious",
-    "partOfSpeech": "adjective",
-    "meaning": "Unwilling to spend money or use resources; stingy or frugal to an extreme.",
-    "exampleSentence": "Despite his immense wealth, the old man lived a parsimonious life, rarely spending on luxuries.",
-    "synonyms": [
-      "stingy",
-      "frugal",
-      "miserly"
-    ],
-    "difficulty": "advanced"
+    "difficulty": "intermediate"
   }
 ]

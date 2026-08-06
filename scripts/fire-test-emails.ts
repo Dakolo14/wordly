@@ -1,11 +1,17 @@
 import { adminDb } from '../src/lib/firebase/firebase-admin';
-import { Resend } from 'resend';
+import nodemailer from 'nodemailer';
 import * as dotenv from 'dotenv';
 import path from 'path';
 
 dotenv.config({ path: path.resolve(process.cwd(), '.env.local') });
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_APP_PASSWORD,
+  },
+});
 
 async function fireTestEmails() {
   const today = new Date().toISOString().split('T')[0];
@@ -60,20 +66,15 @@ async function fireTestEmails() {
       `;
 
       try {
-        const { error } = await resend.emails.send({
-          from: 'Word of the Day <onboarding@resend.dev>',
+        await transporter.sendMail({
+          from: `"Word of the Day" <${process.env.EMAIL_USER}>`,
           to: [email],
           subject: `Word of the Day: ${wordData.word}`,
           html: htmlContent,
         });
 
-        if (error) {
-          console.error(`❌ Failed to send to ${email}: ${error.message}`);
-          failedCount++;
-        } else {
-          console.log(`✅ Successfully sent to ${email}`);
-          sentCount++;
-        }
+        console.log(`✅ Successfully sent to ${email}`);
+        sentCount++;
       } catch (err: any) {
         console.error(`❌ Error attempting to send to ${email}: ${err.message}`);
         failedCount++;

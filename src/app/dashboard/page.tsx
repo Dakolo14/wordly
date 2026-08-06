@@ -30,6 +30,7 @@ export default function Dashboard() {
   const [todayWord, setTodayWord] = useState<DailyWord | null>(null);
   const [history, setHistory] = useState<DailyWord[]>([]);
   const [fetching, setFetching] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     if (!loading && !user) {
@@ -48,7 +49,6 @@ export default function Dashboard() {
 
   const handleSpeak = (text: string) => {
     if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
-      // Cancel any ongoing speech
       window.speechSynthesis.cancel();
       const utterance = new SpeechSynthesisUtterance(text);
       utterance.rate = 0.9;
@@ -60,72 +60,53 @@ export default function Dashboard() {
     async function fetchData() {
       if (!user) return;
       try {
-        const today = new Date().toISOString().split('T')[0];
-        
-        // Auto-heal: Ensure user profile exists
-        const userProfileRef = doc(db, 'profiles', user.uid);
-        const userProfileSnap = await getDoc(userProfileRef);
-        
-        if (!userProfileSnap.exists()) {
-          console.log("Profile missing, auto-healing...");
-          await setDoc(userProfileRef, {
-            displayName: user.displayName || user.email?.split('@')[0] || 'User',
-            email: user.email,
-            emailNotifications: true,
-            currentWordIndex: 2,
-          });
+        const fetchPromise = (async () => {
+          const today = new Date().toISOString().split('T')[0];
           
-          const wordsQuery = query(collection(db, 'words'), where('seqIndex', '==', 1));
-          const wordsSnap = await getDocs(wordsQuery);
-          if (!wordsSnap.empty) {
-            const firstWordDoc = wordsSnap.docs[0];
-            await setDoc(doc(db, 'profiles', user.uid, 'dailyWords', today), {
-              wordId: firstWordDoc.id,
-              createdAt: new Date()
+          const userProfileRef = doc(db, 'profiles', user.uid);
+          const userProfileSnap = await getDoc(userProfileRef);
+          
+          if (!userProfileSnap.exists()) {
+            await setDoc(userProfileRef, {
+              displayName: user.displayName || user.email?.split('@')[0] || 'User',
+              email: user.email,
+              emailNotifications: true,
+              currentWordIndex: 2,
             });
+            
+            const wordsQuery = query(collection(db, 'words'), where('seqIndex', '==', 1));
+            const wordsSnap = await getDocs(wordsQuery);
+            if (!wordsSnap.empty) {
+              const firstWordDoc = wordsSnap.docs[0];
+              await setDoc(doc(db, 'profiles', user.uid, 'dailyWords', today), {
+                wordId: firstWordDoc.id,
+                createdAt: new Date()
+              });
+            }
           }
-        }
-        
-        // Fetch dailyDoc and historyQuery concurrently
-        const dailyDocRef = doc(db, 'profiles', user.uid, 'dailyWords', today);
-        const historyQuery = query(
-          collection(db, 'profiles', user.uid, 'dailyWords'),
-          orderBy('createdAt', 'desc'),
-          limit(7)
-        );
-
-        const [dailyDoc, historySnapshot] = await Promise.all([
-          getDoc(dailyDocRef),
-          getDocs(historyQuery)
-        ]);
-        
-        // Concurrently fetch the word details for today and history
-        const fetchWordDetailsPromises: Promise<void>[] = [];
-        const historyData: DailyWord[] = [];
-
-        if (dailyDoc.exists()) {
-          const wordId = dailyDoc.data().wordId;
-          fetchWordDetailsPromises.push(
-            getDoc(doc(db, 'words', wordId)).then((wordDoc) => {
-              if (wordDoc.exists()) {
-                setTodayWord({
-                  date: today,
-                  wordId,
-                  word: { id: wordDoc.id, ...wordDoc.data() } as Word,
-                });
-              }
-            })
+          
+          const dailyDocRef = doc(db, 'profiles', user.uid, 'dailyWords', today);
+          const historyQuery = query(
+            collection(db, 'profiles', user.uid, 'dailyWords'),
+            orderBy('createdAt', 'desc'),
+            limit(7)
           );
-        }
-        
-        for (const docSnap of historySnapshot.docs) {
-          if (docSnap.id !== today) { // skip today in history
-            const wordId = docSnap.data().wordId;
+
+          const [dailyDoc, historySnapshot] = await Promise.all([
+            getDoc(dailyDocRef),
+            getDocs(historyQuery)
+          ]);
+          
+          const fetchWordDetailsPromises: Promise<void>[] = [];
+          const historyData: DailyWord[] = [];
+
+          if (dailyDoc.exists()) {
+            const wordId = dailyDoc.data().wordId;
             fetchWordDetailsPromises.push(
               getDoc(doc(db, 'words', wordId)).then((wordDoc) => {
                 if (wordDoc.exists()) {
-                  historyData.push({
-                    date: docSnap.id,
+                  setTodayWord({
+                    date: today,
                     wordId,
                     word: { id: wordDoc.id, ...wordDoc.data() } as Word,
                   });
@@ -133,16 +114,39 @@ export default function Dashboard() {
               })
             );
           }
-        }
+          
+          for (const docSnap of historySnapshot.docs) {
+            if (docSnap.id !== today) { 
+              const wordId = docSnap.data().wordId;
+              fetchWordDetailsPromises.push(
+                getDoc(doc(db, 'words', wordId)).then((wordDoc) => {
+                  if (wordDoc.exists()) {
+                    historyData.push({
+                      date: docSnap.id,
+                      wordId,
+                      word: { id: wordDoc.id, ...wordDoc.data() } as Word,
+                    });
+                  }
+                })
+              );
+            }
+          }
+          
+          await Promise.all(fetchWordDetailsPromises);
+          
+          historyData.sort((a, b) => b.date.localeCompare(a.date));
+          setHistory(historyData);
+        })();
+
+        // Race the fetch against an 8 second timeout to prevent infinite loading screens
+        await Promise.race([
+          fetchPromise,
+          new Promise((_, reject) => setTimeout(() => reject(new Error('Network timeout. Please refresh the page.')), 8000))
+        ]);
         
-        await Promise.all(fetchWordDetailsPromises);
-        
-        // Sort history Data descending by date because Promise.all might resolve out of order
-        historyData.sort((a, b) => b.date.localeCompare(a.date));
-        setHistory(historyData);
-        
-      } catch (error) {
-        console.error("Error fetching word data:", error);
+      } catch (err: any) {
+        console.error("Error fetching word data:", err);
+        setError(err.message || 'Failed to load word data.');
       } finally {
         setFetching(false);
       }
@@ -152,7 +156,35 @@ export default function Dashboard() {
   }, [user]);
 
   if (loading || !user || fetching) {
-    return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center p-6 text-center">
+        <div className="w-10 h-10 border-4 border-[var(--color-accent)] border-t-transparent rounded-full animate-spin mb-4"></div>
+        <p className="text-lg opacity-60">Loading your vocabulary...</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center p-6 text-center">
+        <div className="bg-red-50 text-red-500 p-6 rounded-2xl max-w-md border border-red-100 shadow-sm">
+          <h2 className="text-xl font-bold mb-2">Oops! Something went wrong.</h2>
+          <p className="opacity-80 mb-4">{error}</p>
+          <button 
+            onClick={() => window.location.reload()}
+            className="px-6 py-2 bg-red-500 text-white rounded-full font-medium hover:bg-red-600 transition-colors"
+          >
+            Refresh Page
+          </button>
+          <button 
+            onClick={handleLogout}
+            className="block w-full mt-4 text-sm font-medium opacity-60 hover:opacity-100 hover:text-red-500 transition-colors"
+          >
+            Log Out
+          </button>
+        </div>
+      </div>
+    );
   }
 
   return (
