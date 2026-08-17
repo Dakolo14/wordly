@@ -31,6 +31,7 @@ export default function Dashboard() {
   const [history, setHistory] = useState<DailyWord[]>([]);
   const [fetching, setFetching] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [forcingCron, setForcingCron] = useState(false);
 
   useEffect(() => {
     if (!loading && !user) {
@@ -44,6 +45,31 @@ export default function Dashboard() {
       router.push('/login');
     } catch (error) {
       console.error("Error signing out:", error);
+    }
+  };
+
+  const handleForceCron = async () => {
+    if (!user) return;
+    try {
+      setForcingCron(true);
+      const token = await user.getIdToken();
+      const res = await fetch('/api/admin/force-cron', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      const data = await res.json();
+      if (res.ok) {
+        alert("✅ Success: " + data.message);
+        window.location.reload();
+      } else {
+        alert("❌ Failed: " + (data.error || 'Unknown error'));
+      }
+    } catch (e: any) {
+      alert("❌ Error: " + e.message);
+    } finally {
+      setForcingCron(false);
     }
   };
 
@@ -195,6 +221,15 @@ export default function Dashboard() {
       <header className="flex justify-between items-center py-6 mb-8 border-b border-[var(--color-surface-border)]">
         <h1 className="text-xl sm:text-2xl font-medium tracking-tight">Word of the Day</h1>
         <nav className="flex gap-4 items-center">
+          {user?.email === 'ajosedare4u@gmail.com' && (
+            <button 
+              onClick={handleForceCron}
+              disabled={forcingCron}
+              className="text-sm font-medium bg-[var(--color-accent)] text-white px-4 py-2 rounded-full hover:opacity-90 transition-opacity disabled:opacity-50"
+            >
+              {forcingCron ? 'Forcing...' : 'Force Daily Word'}
+            </button>
+          )}
           <button 
             onClick={handleLogout}
             className="text-sm font-medium opacity-60 hover:opacity-100 hover:text-red-500 transition-colors"
